@@ -124,7 +124,7 @@ void traceAlongArc(unsigned int destE,unsigned int currE,int max_steps,int min,i
 		return;
 	}
 
-	unsigned int *array,out_ed,vt;
+	unsigned int *array,out_ed; // ,vt;
 	int num,i,pos,length;
 	preARC *parc;
 
@@ -157,7 +157,7 @@ void traceAlongArc(unsigned int destE,unsigned int currE,int max_steps,int min,i
 		length = len;
 
 	
-	vt = contig_array[currE].to_vt;
+        //	vt = contig_array[currE].to_vt;
 	
 	parc = contig_array[currE].arcs;
 	while(parc){

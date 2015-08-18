@@ -57,7 +57,8 @@ void *ckrealloc(void *p, size_t new_size, size_t old_size)
   q = ckalloc(new_size);
 
   /* move old memory to new space */
-  bcopy(p, q, old_size);
+  //  bcopy(p, q, old_size);
+  memmove(q, p, old_size);
   free(p);
 
   return q;

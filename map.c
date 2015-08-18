@@ -6,7 +6,7 @@
 //static void initenv(int argc, char **argv);
 
 
-static void display_map_usage();
+/* static void display_map_usage(); */
 
 int call_align()
 {

@@ -91,15 +91,14 @@ static void fh_initheap(FibHeap *);
 static void fh_insertrootlist(FibHeap *, FibHeapNode *);
 static void fh_removerootlist(FibHeap *, FibHeapNode *);
 static void fh_consolidate(FibHeap *);
-static void fh_heaplink(FibHeap * h, FibHeapNode * y, FibHeapNode * x);
+static void fh_heaplink(FibHeapNode * y, FibHeapNode * x);
 static void fh_cut(FibHeap *, FibHeapNode *, FibHeapNode *);
 static void fh_cascading_cut(FibHeap *, FibHeapNode *);
 static FibHeapNode *fh_extractminel(FibHeap *);
 static void fh_checkcons(FibHeap * h);
 static void fh_destroyheap(FibHeap * h);
-static int fh_compare(FibHeap * h, FibHeapNode * a, FibHeapNode * b);
-static int fh_comparedata(FibHeap * h, Coordinate key,
-			  unsigned int data, FibHeapNode * b);
+static int fh_compare(FibHeapNode * a, FibHeapNode * b);
+static int fh_comparedata(Coordinate key, unsigned int data, FibHeapNode * b);
 static void fh_insertel(FibHeap * h, FibHeapNode * x);
 
 /*

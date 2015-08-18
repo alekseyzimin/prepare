@@ -7,7 +7,7 @@
 #define UPlimit 5000
 #define MaxRouteNum 10
 
-static Kmer pubKmer = 0x1b4d65165b;
+// static Kmer pubKmer = 0x1b4d65165b;
 
 static void kmerSet_mark(KmerSet *set);
 static void trace4Repeat(Kmer currW,int steps,int min,int max,int *num_route,
@@ -241,54 +241,54 @@ static KmerSet *readsInGap2DBgraph(READNEARBY *rdArray, int num, CTGinSCAF *ctg1
 	return kmerS;
 }
 
-static void printKmer(FILE *fo,Kmer kmer,int overlap)
-{
-	int i;
-	char kmerSeq[32],ch;
-	for(i=overlap-1;i>=0;i--){
-		ch = kmer&3;
-		kmer >>= 2;
-		kmerSeq[i] = ch;
-	}
-	for(i=0;i<overlap;i++)
-		fprintf(fo,"%c",int2base((int)kmerSeq[i]));
-}
+/* static void printKmer(FILE *fo,Kmer kmer,int overlap) */
+/* { */
+/*   int i; */
+/*   char kmerSeq[32],ch; */
+/*   for(i=overlap-1;i>=0;i--){ */
+/*     ch = kmer&3; */
+/*     kmer >>= 2; */
+/*     kmerSeq[i] = ch; */
+/*   } */
+/*   for(i=0;i<overlap;i++) */
+/*     fprintf(fo,"%c",int2base((int)kmerSeq[i])); */
+/* } */
 
 static void kmerSet_mark(KmerSet *set)
 {
-	int i,in_num,out_num,cvgSingle;
-	kmer_t *rs;
-	long long counter = 0,linear=0;
-	Kmer word;
+  int i,in_num,out_num,cvgSingle;
+  kmer_t *rs;
+  long long counter = 0,linear=0;
+  //	Kmer word;
 
-	set->iter_ptr = 0;
-	while(set->iter_ptr < set->size){
-		if(!is_kmer_entity_null(set->flags, set->iter_ptr)){
-			in_num = out_num = 0;
-			rs = set->array + set->iter_ptr;
-			word = rs->seq;
-			for(i=0;i<4;i++){
-				cvgSingle = get_kmer_left_cov(*rs,i);
-				if(cvgSingle>0){
-					in_num++;
-				}
-				cvgSingle = get_kmer_right_cov(*rs,i);
-				if(cvgSingle>0){
-					out_num++;
-				}
-			}
+  set->iter_ptr = 0;
+  while(set->iter_ptr < set->size){
+    if(!is_kmer_entity_null(set->flags, set->iter_ptr)){
+      in_num = out_num = 0;
+      rs = set->array + set->iter_ptr;
+      //			word = rs->seq;
+      for(i=0;i<4;i++){
+        cvgSingle = get_kmer_left_cov(*rs,i);
+        if(cvgSingle>0){
+          in_num++;
+        }
+        cvgSingle = get_kmer_right_cov(*rs,i);
+        if(cvgSingle>0){
+          out_num++;
+        }
+      }
 
-			if(rs->single){
-				counter++;
-			}
-			if(in_num==1&&out_num==1){
-				rs->linear = 1;
-				linear++;
-			}
-		}
-		set->iter_ptr ++;
-	}
-	//printf("Allocated %ld node, %ld single nodes, %ld linear\n",(long)count_kmerset(set),counter,linear);
+      if(rs->single){
+        counter++;
+      }
+      if(in_num==1&&out_num==1){
+        rs->linear = 1;
+        linear++;
+      }
+    }
+    set->iter_ptr ++;
+  }
+  //printf("Allocated %ld node, %ld single nodes, %ld linear\n",(long)count_kmerset(set),counter,linear);
 }
 
 static kmer_t *searchNode(Kmer word,KmerSet *kset,int overlap)
@@ -511,7 +511,7 @@ static int searchFgap(KmerSet *kset,CTGinSCAF *ctg1,CTGinSCAF *ctg2,Kmer *kmerCt
 			int maxLen=routeLens[0];
 			double maxLink = avgLinks[0];
 			char *pt;
-			boolean repeat=0,sameLen=1;
+			boolean repeat=0; // ,sameLen=1;
 			int leftMost=max,rightMost=max;
 			if(num_route<1){
 				fprintf(stderr,"After trace4Repeat: non route was found\n");
@@ -527,8 +527,8 @@ static int searchFgap(KmerSet *kset,CTGinSCAF *ctg1,CTGinSCAF *ctg2,Kmer *kmerCt
 						leftMost = leftMost>MULTI1[m] ? MULTI1[m]:leftMost;
 						rightMost = rightMost>MULTI2[m] ? MULTI2[m]:rightMost;
 					}
-					if(routeLens[m]!=maxLen)
-						sameLen = 0;
+					/* if(routeLens[m]!=maxLen) */
+					/* 	sameLen = 0; */
 					if(routeLens[m]<maxLen)
 						maxLen = routeLens[m];
 					if(avgLinks[m]>maxLink){
@@ -681,7 +681,7 @@ static void trace4Repeat(Kmer currW,int steps,int min,int max,int *num_route,
 		soFarNode[steps] = node;
 	if(soFarSeq&&steps>0)
 		soFarSeq[steps-1] = currW&0x03;
-	int linkCounter;
+	int linkCounter = 0;
 	if(soFarLinks)
 		linkCounter = *soFarLinks;
 	if(steps>=min&&currW==kmerDest){
@@ -993,7 +993,7 @@ static boolean readsCrossGap(READNEARBY *rdArray, int num, int originOverlap,DAR
 	return ret;
 }
 */
-static void kmerSet_markTandem(KmerSet *set,Kmer WordFilter,int overlap);
+/* static void kmerSet_markTandem(KmerSet *set,Kmer WordFilter,int overlap); */
 static boolean readsCrossGap(READNEARBY *rdArray, int num, int originOverlap,DARRAY *gapSeqArray,
 				Kmer *kmerCtg1,Kmer *kmerCtg2,int overlap,
 					CTGinSCAF *ctg1,CTGinSCAF *ctg2,KmerSet *kmerS,Kmer WordFilter,int min,int max,
@@ -1076,41 +1076,41 @@ int localGraph(READNEARBY *rdArray,int num,CTGinSCAF *ctg1,CTGinSCAF *ctg2,
 	
 }
 
-static void kmerSet_markTandem(KmerSet *set,Kmer WordFilter,int overlap)
-{
-	kmer_t *rs;
-	long long counter = 0;
-	int num_route,steps;
-	int min=1,max=overlap,maxRoute=1;
-	int traceCounter;
+/* static void kmerSet_markTandem(KmerSet *set,Kmer WordFilter,int overlap) */
+/* { */
+/* 	kmer_t *rs; */
+/* 	long long counter = 0; */
+/* 	int num_route,steps; */
+/* 	int min=1,max=overlap,maxRoute=1; */
+/* 	int traceCounter; */
 
-	set->iter_ptr = 0;
-	while(set->iter_ptr < set->size){
-		if(!is_kmer_entity_null(set->flags, set->iter_ptr)){
-			rs = set->array + set->iter_ptr;
-			if(rs->inEdge>0){
-				set->iter_ptr ++;
-				continue;
-			}
-			num_route = traceCounter = 0;
-			steps=0;
-			trace4Repeat(rs->seq,steps,min,max,&num_route,
-				set,rs->seq,overlap,WordFilter,
-					&traceCounter,maxRoute,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
-			if(num_route<1){
-				set->iter_ptr ++;
-				continue;
-			}
-			/*
-			printKmer(stderr,rs->seq,overlap);
-			fprintf(stderr, "\n");
-			*/
-			rs->checked = 1;
-			counter++;
-		}
-		set->iter_ptr ++;
-	}
-}
+/* 	set->iter_ptr = 0; */
+/* 	while(set->iter_ptr < set->size){ */
+/* 		if(!is_kmer_entity_null(set->flags, set->iter_ptr)){ */
+/* 			rs = set->array + set->iter_ptr; */
+/* 			if(rs->inEdge>0){ */
+/* 				set->iter_ptr ++; */
+/* 				continue; */
+/* 			} */
+/* 			num_route = traceCounter = 0; */
+/* 			steps=0; */
+/* 			trace4Repeat(rs->seq,steps,min,max,&num_route, */
+/* 				set,rs->seq,overlap,WordFilter, */
+/* 					&traceCounter,maxRoute,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL); */
+/* 			if(num_route<1){ */
+/* 				set->iter_ptr ++; */
+/* 				continue; */
+/* 			} */
+/* 			/\* */
+/* 			printKmer(stderr,rs->seq,overlap); */
+/* 			fprintf(stderr, "\n"); */
+/* 			*\/ */
+/* 			rs->checked = 1; */
+/* 			counter++; */
+/* 		} */
+/* 		set->iter_ptr ++; */
+/* 	} */
+/* } */
 /******************* the following is for read-crossing gaps *************************/
 
 #define MAXREADLENGTH 100
@@ -1126,8 +1126,8 @@ static char fastSequence[MAXREADLENGTH];
 static char slowSequence[MAXREADLENGTH];
 
 static int Fmatrix[MAXREADLENGTH + 1][MAXREADLENGTH + 1];
-static int slowToFastMapping[MAXREADLENGTH + 1];
-static int fastToSlowMapping[MAXREADLENGTH + 1];
+/* static int slowToFastMapping[MAXREADLENGTH + 1]; */
+/* static int fastToSlowMapping[MAXREADLENGTH + 1]; */
 
 static int max(int A, int B, int C)
 {
@@ -1165,64 +1165,64 @@ static int compareSequences(char * sequence1, char * sequence2, int length1, int
 	return maxScore;
 }
 
-static void mapSlowOntoFast(int slowSeqLength,int fastSeqLength)
-{
-	int slowIndex = slowSeqLength;
-	int fastIndex = fastSeqLength;
-	int fastn, slown;
+/* static void mapSlowOntoFast(int slowSeqLength,int fastSeqLength) */
+/* { */
+/* 	int slowIndex = slowSeqLength; */
+/* 	int fastIndex = fastSeqLength; */
+/* 	int fastn, slown; */
 
-	if (slowIndex == 0) {
-		slowToFastMapping[0] = fastIndex;
+/* 	if (slowIndex == 0) { */
+/* 		slowToFastMapping[0] = fastIndex; */
 
-		while (fastIndex >= 0)
-			fastToSlowMapping[fastIndex--] = 0;
+/* 		while (fastIndex >= 0) */
+/* 			fastToSlowMapping[fastIndex--] = 0; */
 
-		return;
-	}
+/* 		return; */
+/* 	} */
 
-	if (fastIndex == 0) {
-		while (slowIndex >= 0)
-			slowToFastMapping[slowIndex--] = 0;
+/* 	if (fastIndex == 0) { */
+/* 		while (slowIndex >= 0) */
+/* 			slowToFastMapping[slowIndex--] = 0; */
 
-		fastToSlowMapping[0] = slowIndex;
+/* 		fastToSlowMapping[0] = slowIndex; */
 
-		return;
-	}
+/* 		return; */
+/* 	} */
 
-	while (slowIndex > 0 && fastIndex > 0) {
-		fastn = (int) fastSequence[fastIndex-1]; //getCharInTightString(fastSequence,fastIndex-1);
-		slown = (int) slowSequence[slowIndex-1]; //getCharInTightString(slowSequence,slowIndex-1);
+/* 	while (slowIndex > 0 && fastIndex > 0) { */
+/* 		fastn = (int) fastSequence[fastIndex-1]; //getCharInTightString(fastSequence,fastIndex-1); */
+/* 		slown = (int) slowSequence[slowIndex-1]; //getCharInTightString(slowSequence,slowIndex-1); */
 
-		if (Fmatrix[fastIndex][slowIndex] ==
-		    Fmatrix[fastIndex - 1][slowIndex - 1] +
-		    SIM[fastn][slown]) {
-			fastToSlowMapping[--fastIndex] = --slowIndex;
-			slowToFastMapping[slowIndex] = fastIndex;
-		} else if (Fmatrix[fastIndex][slowIndex] ==
-			   Fmatrix[fastIndex - 1][slowIndex] + INDEL)
-			fastToSlowMapping[--fastIndex] = slowIndex - 1;
+/* 		if (Fmatrix[fastIndex][slowIndex] == */
+/* 		    Fmatrix[fastIndex - 1][slowIndex - 1] + */
+/* 		    SIM[fastn][slown]) { */
+/* 			fastToSlowMapping[--fastIndex] = --slowIndex; */
+/* 			slowToFastMapping[slowIndex] = fastIndex; */
+/* 		} else if (Fmatrix[fastIndex][slowIndex] == */
+/* 			   Fmatrix[fastIndex - 1][slowIndex] + INDEL) */
+/* 			fastToSlowMapping[--fastIndex] = slowIndex - 1; */
 
-		else if (Fmatrix[fastIndex][slowIndex] ==
-			 Fmatrix[fastIndex][slowIndex - 1] + INDEL)
-			slowToFastMapping[--slowIndex] = fastIndex - 1;
+/* 		else if (Fmatrix[fastIndex][slowIndex] == */
+/* 			 Fmatrix[fastIndex][slowIndex - 1] + INDEL) */
+/* 			slowToFastMapping[--slowIndex] = fastIndex - 1; */
 
-		else {
-			printf("compareSequence: Error trace\n");
-			fflush(stdout);
-			abort();
-		}
-	}
+/* 		else { */
+/* 			printf("compareSequence: Error trace\n"); */
+/* 			fflush(stdout); */
+/* 			abort(); */
+/* 		} */
+/* 	} */
 
-	while (slowIndex > 0)
-		slowToFastMapping[--slowIndex] = -1;
-	while (fastIndex > 0)
-		fastToSlowMapping[--fastIndex] = -1;
+/* 	while (slowIndex > 0) */
+/* 		slowToFastMapping[--slowIndex] = -1; */
+/* 	while (fastIndex > 0) */
+/* 		fastToSlowMapping[--fastIndex] = -1; */
 
-	slowToFastMapping[slowSeqLength] =
-	    fastSeqLength;
-	fastToSlowMapping[fastSeqLength] =
-	    slowSeqLength;
-}
+/* 	slowToFastMapping[slowSeqLength] = */
+/* 	    fastSeqLength; */
+/* 	fastToSlowMapping[fastSeqLength] = */
+/* 	    slowSeqLength; */
+/* } */
 
 static boolean chopReadFillGap(int len_seq,int overlap,char *src_seq, char *bal_seq,
 					KmerSet *kset,Kmer WORDF,int *start,int *end,boolean *bal, 
@@ -1231,8 +1231,8 @@ static boolean chopReadFillGap(int len_seq,int overlap,char *src_seq, char *bal_
 	int index,j=0,bal_j;
 	Kmer word,bal_word;
 	int flag=0,bal_flag=0;
-	int ctg1start,bal_ctg1start,ctg2end,bal_ctg2end;
-	int seqStart,bal_start,seqEnd,bal_end;
+	int ctg1start = 0,bal_ctg1start,ctg2end,bal_ctg2end = 0;
+	int seqStart = 0,bal_start,seqEnd,bal_end = 0;
 	kmer_t *node;
 	boolean found;
 	
@@ -1388,14 +1388,14 @@ static int cutSeqFromRead(char *src_seq,int length,int start,int end,char *seque
 	return end-start+1;
 }
 
-static void printSeq(FILE *fo,char *seq,int len)
-{
-	int i;
-	for(i=0;i<len;i++)
-		fprintf(fo,"%c",int2base((int)seq[i]));
+/* static void printSeq(FILE *fo,char *seq,int len) */
+/* { */
+/* 	int i; */
+/* 	for(i=0;i<len;i++) */
+/* 		fprintf(fo,"%c",int2base((int)seq[i])); */
 
-	fprintf(fo,"\n");
-}
+/* 	fprintf(fo,"\n"); */
+/* } */
 
 static boolean readsCrossGap(READNEARBY *rdArray, int num, int originOverlap,DARRAY *gapSeqArray,
 				Kmer *kmerCtg1,Kmer *kmerCtg2,int overlap,
@@ -1408,7 +1408,7 @@ static boolean readsCrossGap(READNEARBY *rdArray, int num, int originOverlap,DAR
 	char *pt;
 	boolean bal,ret=0,FILL;
 	double maxScore=0.0;
-	int maxIndex;
+	int maxIndex = 0;
 	int lenCtg1,lenCtg2;
 	//build sequences on left and right of the uncertain region 
 	int buffer_size=maxReadLen > 100 ? maxReadLen:100;

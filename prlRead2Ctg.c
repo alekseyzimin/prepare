@@ -1,4 +1,4 @@
-#include "stdinc.h" 
+#include "stdinc.h"
 #include "newhash.h"
 #include "extfunc.h" 
 #include "extvab.h" 
@@ -12,17 +12,17 @@ static ubyte probableMatrix[4][4] = {
 	{3, 1, 2, 7}				//	G->G A T C	
 };
 
-static ubyte2 doubleBitMasker[7] = {
-	0x3,								//000000 00000011
-	0xC,								//000000 00001100
-	0x30,								//000000 00110000
-	0xC0,								//000000 11000000
-	0x300,							//000011 00000000
-	0xC00,							//001100 00000000
-	0x3000							//110000 00000000
-};
+/* static ubyte2 doubleBitMasker[7] = { */
+/* 	0x3,								//000000 00000011 */
+/* 	0xC,								//000000 00001100 */
+/* 	0x30,								//000000 00110000 */
+/* 	0xC0,								//000000 11000000 */
+/* 	0x300,							//000011 00000000 */
+/* 	0xC00,							//001100 00000000 */
+/* 	0x3000							//110000 00000000 */
+/* }; */
 
-static boolean staticFlag=1;
+/* static boolean staticFlag=1; */
 
 static long long readsInGap=0;
 
@@ -111,7 +111,7 @@ static void threadRoutine(void *para)
 			break;
 		}
 
-		usleep(1);
+                usleep(1);
 	}
 }
 /*
@@ -222,10 +222,10 @@ static void searchKmer(int t,KmerSet *kset)
 		{
 			++kset->getSpcSeedCnt;
 			
-			int i=0,j=0,getFlag=-1;
+			int j=0,getFlag=-1;
 			int mismatch=0;
-			ubyte2 tmp,mostLastBase;	//loci flags
-			ubyte2 bestSpcBases;			//best spaced bases
+			ubyte2 tmp,mostLastBase = 0;	//loci flags
+			ubyte2 bestSpcBases = 0;			//best spaced bases
 			int min_mis=31;
 			ubyte2 tmpSpcBase;
 							
@@ -317,7 +317,6 @@ static void parse1read(int t,int threadID)
 	kmer_t *node;
 	boolean isSmaller;
 	int flag,maxOcc=0;
-	kmer_t *maxNode=NULL;
 	int alldgnLen = lenBuffer[t] > ALIGNLEN ? ALIGNLEN:lenBuffer[t];
 	int multi = alldgnLen-overlaplen+1 < 5 ? 5:alldgnLen-overlaplen+1;
 	unsigned int start,finish;
@@ -359,7 +358,6 @@ static void parse1read(int t,int threadID)
 		if(flag>maxOcc){
 			pos = j;
 			maxOcc = flag;
-			maxNode = node;
 		}
 	}
 	if(!counter){  //no match
@@ -405,36 +403,36 @@ static void sendWorkSignal(unsigned char SIG,unsigned char *thrdSignals)
 	}
 }
 
-static void locate1read(int t)
-{
-	int i,j,start,finish;
-	kmer_t *node;
-	unsigned int contigID;
-	int pos,ctgLen;
-	boolean isSmaller;
+/* static void locate1read(int t) */
+/* { */
+/* 	int i,j,start,finish; */
+/* 	kmer_t *node; */
+/* 	unsigned int contigID; */
+/* 	int pos,ctgLen; */
+/* 	boolean isSmaller; */
 
-	start = indexArray[t];
-	finish = indexArray[t+1];
+/* 	start = indexArray[t]; */
+/* 	finish = indexArray[t+1]; */
 		
-	for(j=start;j<finish;j++){
-		node = nodeBuffer[j];	
-		if(!node)  //same as previous
-			continue;
-		i = j - start + 1;
-		isSmaller = smallerBuffer[j];
-		contigID = node->l_links;
-		ctgLen = contig_array[contigID].length;
-		pos = node->r_links;
-		if(node->twin==isSmaller){
-			ctgIdArray[t] = getTwinCtg(contigID);
-			posArray[t] = ctgLen - pos -overlaplen -i + 1;
-		}else{
-			ctgIdArray[t] = contigID;
-			posArray[t] = pos - i + 1;
-		}
-	}
+/* 	for(j=start;j<finish;j++){ */
+/* 		node = nodeBuffer[j];	 */
+/* 		if(!node)  //same as previous */
+/* 			continue; */
+/* 		i = j - start + 1; */
+/* 		isSmaller = smallerBuffer[j]; */
+/* 		contigID = node->l_links; */
+/* 		ctgLen = contig_array[contigID].length; */
+/* 		pos = node->r_links; */
+/* 		if(node->twin==isSmaller){ */
+/* 			ctgIdArray[t] = getTwinCtg(contigID); */
+/* 			posArray[t] = ctgLen - pos -overlaplen -i + 1; */
+/* 		}else{ */
+/* 			ctgIdArray[t] = contigID; */
+/* 			posArray[t] = pos - i + 1; */
+/* 		} */
+/* 	} */
 	
-}
+/* } */
 
 static void output1read(int t, FILE *outfp)
 {
@@ -564,7 +562,7 @@ void prlRead2Ctg(char *libfile,char *outfile)
 	long long i;
 	char *src_name,*next_name,name[256];
 	FILE *fo,*outfp2=NULL;
-	int maxReadNum,libNo,prevLibNo,insSize;
+	int maxReadNum,libNo,prevLibNo,insSize = 0;
 	boolean flag,pairs=1;
 	pthread_t threads[thrd_num];
 	unsigned char thrdSignal[thrd_num+1];

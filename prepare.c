@@ -194,7 +194,7 @@ boolean upper_rev(char *in,int in_len){
 	for(i=0;i<it_num;++i){
 		in[i]=toupper(in[i]);
 		in[in_len-i-1]=toupper(in[in_len-i-1]);
-		if(in[i]!=rev[in[in_len-i-1]]){
+		if(in[i]!=rev[(int)in[in_len-i-1]]){
 			ret_flag=0;
 		}
 	}

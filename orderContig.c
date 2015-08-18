@@ -50,8 +50,8 @@ static int setConnectDelete(unsigned int from_c,unsigned int to_c,char flag,bool
 static int setConnectWP(unsigned int from_c,unsigned int to_c,char flag);
 
 static void general_linearization(boolean strict);
-static void debugging2();
-static void smallScaf();
+/* static void debugging2(); */
+/* static void smallScaf(); */
 static void detectBreakScaf();
 static boolean checkSimple(DARRAY *ctgArray,int count);
 static void checkCircle();
@@ -179,7 +179,7 @@ static void downSlide()
 	unsigned int i;
 	CONNECT *ite_cnt,*bindCnt,*temp_cnt;
 	unsigned int bottomCtg,topCtg,bal_i;
-	unsigned int targetCtg,bal_target;
+	unsigned int targetCtg,bal_target = 0;
 	boolean getThrough,orienConflict;
 	int slideLen,slideLen2;
 
@@ -1000,19 +1000,19 @@ static void removeTransitive()
        > [i] <
 	B          E 
 */
-static void debugging2(unsigned int ctg)
-{
-	CONNECT *cn1 = contig_array[ctg].downwardConnect;
-	while(cn1){
-		if(cn1->nextInScaf)
-			fprintf(stderr,"with nextInScaf,");
-		if(cn1->prevInScaf)
-			fprintf(stderr,"with prevInScaf,");
-		fprintf(stderr,"%u >> %d, mask %d deleted %d, inherit %d, singleInScaf %d\n",
-			ctg,cn1->contigID,cn1->mask,cn1->deleted,cn1->inherit,cn1->singleInScaf);
-		cn1 = cn1->next;	
-	}
-}
+/* static void debugging2(unsigned int ctg) */
+/* { */
+/* 	CONNECT *cn1 = contig_array[ctg].downwardConnect; */
+/* 	while(cn1){ */
+/* 		if(cn1->nextInScaf) */
+/* 			fprintf(stderr,"with nextInScaf,"); */
+/* 		if(cn1->prevInScaf) */
+/* 			fprintf(stderr,"with prevInScaf,"); */
+/* 		fprintf(stderr,"%u >> %d, mask %d deleted %d, inherit %d, singleInScaf %d\n", */
+/* 			ctg,cn1->contigID,cn1->mask,cn1->deleted,cn1->inherit,cn1->singleInScaf); */
+/* 		cn1 = cn1->next;	 */
+/* 	} */
+/* } */
 static void debugging()
 {
 /*
@@ -1322,7 +1322,7 @@ static void maskRepeat()
 }
 
 
-static void ordering(boolean deWeak,boolean downS, boolean nonlinear, char *infile)
+static void ordering(boolean deWeak,boolean downS, boolean nonlinear) // , char *infile)
 {
 			//debugging();
 			if(downS){
@@ -1868,7 +1868,7 @@ void scaffolding(unsigned int len_cut,char *outfile)
 	FILE *fp,*fo=NULL;
 	char name[256];
 	CONNECT *cnt,*prevCNT,*nextCnt;
-	boolean excep,weak;
+	boolean excep; // ,weak;
 	weakCounter = 0;
 
 	so_far = (unsigned int *)ckalloc(max_n_routes*sizeof(unsigned int));
@@ -1983,8 +1983,9 @@ void scaffolding(unsigned int len_cut,char *outfile)
 				fprintf(fp,"%-10d %-10d +   %d "
 					,index_array[*(unsigned int *)darrayGet(scaf3,j)],len,
 					contig_array[*(unsigned int *)darrayGet(scaf3,j)].length+overlaplen);
-				weak = printCnts(fp,*(unsigned int *)darrayGet(scaf3,j));
+                                printCnts(fp,*(unsigned int *)darrayGet(scaf3,j));
 				/*
+				weak = printCnts(fp,*(unsigned int *)darrayGet(scaf3,j));
 				if(weak)
 					fprintf(stderr,"scaffold%d\n",count);
 				*/
@@ -1992,8 +1993,9 @@ void scaffolding(unsigned int len_cut,char *outfile)
 				fprintf(fp,"%-10d %-10d -   %d "
 					,index_array[getTwinCtg(*(unsigned int *)darrayGet(scaf3,j))],len
 					,contig_array[*(unsigned int *)darrayGet(scaf3,j)].length+overlaplen);
-				weak = printCnts(fp,*(unsigned int *)darrayGet(scaf3,j));
+                                printCnts(fp,*(unsigned int *)darrayGet(scaf3,j));
 				/*
+                                weak = printCnts(fp,*(unsigned int *)darrayGet(scaf3,j));
 				if(weak)
 					fprintf(stderr,"scaffold%d\n",count);
 				*/
@@ -2017,8 +2019,9 @@ void scaffolding(unsigned int len_cut,char *outfile)
 				fprintf(fp,"%-10d %-10d +   %d "
 					,index_array[*(unsigned int *)darrayGet(scaf5,j)],len
 					,contig_array[*(unsigned int *)darrayGet(scaf5,j)].length+overlaplen);
-				weak = printCnts(fp,*(unsigned int *)darrayGet(scaf5,j));
+                                printCnts(fp,*(unsigned int *)darrayGet(scaf5,j));
 				/*
+                                weak = printCnts(fp,*(unsigned int *)darrayGet(scaf5,j));
 				if(weak)
 					fprintf(stderr,"scaffold%d\n",count);
 				*/
@@ -2026,8 +2029,9 @@ void scaffolding(unsigned int len_cut,char *outfile)
 				fprintf(fp,"%-10d %-10d -   %d "
 					,index_array[getTwinCtg(*(unsigned int *)darrayGet(scaf5,j))],len
 					,contig_array[*(unsigned int *)darrayGet(scaf5,j)].length+overlaplen);
-				weak = printCnts(fp,*(unsigned int *)darrayGet(scaf5,j));
+                                printCnts(fp,*(unsigned int *)darrayGet(scaf5,j));
 				/*
+                                weak = printCnts(fp,*(unsigned int *)darrayGet(scaf5,j));
 				if(weak)
 					fprintf(stderr,"scaffold%d\n",count);
 				*/
@@ -2334,7 +2338,7 @@ void Links2Scaf(char *infile)
 				nonLinear = 1;
 			if(i==gradsCounter-1&&!isPrevSmall&&smallPE)
 				detectBreakScaf();
-			ordering(1,downS,nonLinear,infile);
+			ordering(1,downS,nonLinear); // ,infile);
 			if(i==gradsCounter-1)
 				recoverMask();
 		}
@@ -2415,12 +2419,9 @@ static boolean dispatch1node(int dis,unsigned int tempNode,int maxNodes,
 	return 0;
 }
 
-static boolean canDheapWait(unsigned int currNode,int dis, int DmaxDis)
+static inline boolean canDheapWait(int dis, int DmaxDis)
 {
-	if(dis<DmaxDis)
-		return 0;
-	else
-		return 1;
+  return !(dis < DmaxDis);
 }
 
 static boolean workOnDheap(FibHeap *dheap,FibHeap *uheap,boolean *Dwait,boolean *Uwait,
@@ -2469,7 +2470,7 @@ static boolean workOnDheap(FibHeap *dheap,FibHeap *uheap,boolean *Dwait,boolean 
 		}
 		
 		if(nodeCounter>1&&isEmpty){
-			*Dwait = canDheapWait(currNode,dis0,*DmaxDis);	
+			*Dwait = canDheapWait(dis0,*DmaxDis);	
 			if(*Dwait){
 				isEmpty = IsHeapEmpty(dheap);
 				insertNodeIntoHeap(dheap,dis0,indexInArray);
@@ -2991,58 +2992,58 @@ static void general_linearization(boolean strict)
 
 /****       the fowllowing codes for detecting and break down scaffold at weak point  **********/
 // mark connections in scaffolds made by small pe 
-static void smallScaf()
-{
-	unsigned int i,ctg,bal_ctg,prevCtg;
-	int counter=0;
-	CONNECT *bindCnt,*cnt;
+/* static void smallScaf() */
+/* { */
+/* 	unsigned int i,ctg,bal_ctg,prevCtg; */
+/* 	int counter=0; */
+/* 	CONNECT *bindCnt,*cnt; */
 
-	for(i=1;i<=num_ctg;i++)
-		contig_array[i].flag = 0;
-	for(i=1;i<=num_ctg;i++){
-		if(contig_array[i].flag||contig_array[i].mask||!contig_array[i].downwardConnect)
-			continue;
-		bindCnt = getBindCnt(i);
-		if(!bindCnt)
-			continue;
-		counter++;
+/* 	for(i=1;i<=num_ctg;i++) */
+/* 		contig_array[i].flag = 0; */
+/* 	for(i=1;i<=num_ctg;i++){ */
+/* 		if(contig_array[i].flag||contig_array[i].mask||!contig_array[i].downwardConnect) */
+/* 			continue; */
+/* 		bindCnt = getBindCnt(i); */
+/* 		if(!bindCnt) */
+/* 			continue; */
+/* 		counter++; */
 		
-		contig_array[i].flag = 1;
-		contig_array[getTwinCtg(i)].flag = 1;
-		prevCtg = getTwinCtg(i);
-		while(bindCnt){
-			ctg = bindCnt->contigID;
-			bal_ctg = getTwinCtg(ctg);
-			bindCnt->bySmall = 1;
-			cnt = getCntBetween(bal_ctg,prevCtg);
-			if(cnt)
-				cnt->bySmall = 1;
+/* 		contig_array[i].flag = 1; */
+/* 		contig_array[getTwinCtg(i)].flag = 1; */
+/* 		prevCtg = getTwinCtg(i); */
+/* 		while(bindCnt){ */
+/* 			ctg = bindCnt->contigID; */
+/* 			bal_ctg = getTwinCtg(ctg); */
+/* 			bindCnt->bySmall = 1; */
+/* 			cnt = getCntBetween(bal_ctg,prevCtg); */
+/* 			if(cnt) */
+/* 				cnt->bySmall = 1; */
 			
-			contig_array[ctg].flag = 1;
-			contig_array[bal_ctg].flag = 1;
-			prevCtg = bal_ctg;
-			bindCnt = bindCnt->nextInScaf;
-		}
+/* 			contig_array[ctg].flag = 1; */
+/* 			contig_array[bal_ctg].flag = 1; */
+/* 			prevCtg = bal_ctg; */
+/* 			bindCnt = bindCnt->nextInScaf; */
+/* 		} */
 
-		ctg = getTwinCtg(i);
-		bindCnt = getBindCnt(ctg);
-		prevCtg = i;
-		while(bindCnt){
-			ctg = bindCnt->contigID;
-			bal_ctg = getTwinCtg(ctg);
-			bindCnt->bySmall = 1;
-			cnt = getCntBetween(bal_ctg,prevCtg);
-			if(cnt)
-				cnt->bySmall = 1;
+/* 		ctg = getTwinCtg(i); */
+/* 		bindCnt = getBindCnt(ctg); */
+/* 		prevCtg = i; */
+/* 		while(bindCnt){ */
+/* 			ctg = bindCnt->contigID; */
+/* 			bal_ctg = getTwinCtg(ctg); */
+/* 			bindCnt->bySmall = 1; */
+/* 			cnt = getCntBetween(bal_ctg,prevCtg); */
+/* 			if(cnt) */
+/* 				cnt->bySmall = 1; */
 			
-			contig_array[ctg].flag = 1;
-			contig_array[bal_ctg].flag = 1;
-			prevCtg = bal_ctg;
-			bindCnt = bindCnt->nextInScaf;
-		}
-	}
-	//printf("Report from smallScaf: %d scaffolds by smallPE\n",counter);
-}
+/* 			contig_array[ctg].flag = 1; */
+/* 			contig_array[bal_ctg].flag = 1; */
+/* 			prevCtg = bal_ctg; */
+/* 			bindCnt = bindCnt->nextInScaf; */
+/* 		} */
+/* 	} */
+/* 	//printf("Report from smallScaf: %d scaffolds by smallPE\n",counter); */
+/* } */
 
 static boolean putItem2Sarray(unsigned int scaf,int wt,DARRAY *SCAF,DARRAY *WT,int counter)
 {

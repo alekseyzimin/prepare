@@ -274,7 +274,7 @@ void openFileInLib(int libNo)
 		lib_array[i].paired = 1;
 	}else if(lib_array[i].curr_type==3){
 		printf("[%s]opened file:\n %s\n",
-					lib_array[i].p_fname[lib_array[i].curr_index]);
+                       __FUNCTION__,lib_array[i].p_fname[lib_array[i].curr_index]);
 		lib_array[i].fp1 = openFile4read(lib_array[i].p_fname[lib_array[i].curr_index]);	
 		lib_array[i].curr_index++;
 		lib_array[i].paired = 0;

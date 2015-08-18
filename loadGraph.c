@@ -5,7 +5,7 @@
 
 #define preARCBLOCKSIZE 100000
 
-static void loadArcs(char *graphfile);
+/* static void loadArcs(char *graphfile); */
 static void loadContig(char *graphfile);
 
 void loadUpdatedVertex(char *graphfile)
@@ -144,11 +144,11 @@ void quick_sort_int(unsigned int *length_array, int low, int high)
 
 void loadUpdatedEdges(char *graphfile)
 {
-	char c,name[256],line[1024];
+        char name[256],line[1024]; // , c
 	int bal_ed,cvg;
 	FILE *fp,*out_fp;
-	unsigned long long from_kmer,to_kmer;
-	unsigned int num_ctgge,length,index=0,num_kmer;
+        //	unsigned long long from_kmer,to_kmer;
+	unsigned int num_ctgge,length,index=0;
 	unsigned int i=0,j;
 	unsigned int newIndex;
 	unsigned int *length_array,*flag_array,diff_len;
@@ -160,6 +160,7 @@ void loadUpdatedEdges(char *graphfile)
 	/*sprintf(name, "%s.preGraphBasic", graphfile);
 	fp = ckopen(name, "r");
 
+        int num_kmer;
 	while(fgets(line,sizeof(line),fp)!=NULL){
 		if(line[0] == 'V'){
 			sscanf(line+6, "%d %c %d",&num_kmer,&c,&overlaplen);
@@ -341,7 +342,6 @@ void loadContig(char *graphfile)
 	char c,name[256],line[1024],*tightSeq=NULL;
 	FILE *fp;
 	int n=0,length,index=-1,edgeno;
-	unsigned int i;
 	unsigned int newIndex;
 	
 	sprintf(name,"%s.contig",graphfile);
@@ -361,7 +361,7 @@ void loadContig(char *graphfile)
 			//fprintf(stderr,"[%s]loaded %d.\n",__FUNCTION__,edgeno);
 		}else{
 			int tmp_len=strlen(line);
-			for(i=0;i<tmp_len;i++){
+			for(int i=0;i<tmp_len;i++){
 				if(line[i]>='a' && line[i]<='z'){
 					c = base2int(line[i]-'a'+'A');
 					writeChar2tightString(c,tightSeq,n++);

@@ -421,7 +421,7 @@ PUBLIC_FUNC void buildSpcKmerSet(KmerSet *set, spcKmerSet *spaced_kset)
 	Kmer buff_kmer, spc_kmer;
 	ubyte2 spc_bases;
 	
-	ubyte8 i=0,j=0;
+	ubyte8 i=0; // ,j=0;
 	for(i=0;i<set->size;i++)
 	{
 		if(is_kmer_entity_null(set->flags, i))

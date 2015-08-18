@@ -1,4 +1,4 @@
-#include "stdinc.h" 
+#include "stdinc.h"
 #include "newhash.h"
 #include "extfunc.h" 
 #include "extvab.h" 
@@ -14,7 +14,7 @@ static int *lenBuffer;
 static unsigned int *indexArray;
 static unsigned int *seqBreakers;
 static int *ctgIdArray;
-static Kmer *firstKmers;
+// static Kmer *firstKmers;
 
 //buffer related varibles for splay tree
 static unsigned int buffer_size=10000000;
@@ -30,6 +30,7 @@ static void chopKmer4read(int t,int threadID);
 
 static void threadRoutine(void *para)
 {
+        static const struct timespec one_micro = { 0, 1000 };
 	PARAMETER *prm;
 	unsigned int i;
 	unsigned char id;
@@ -69,7 +70,7 @@ static void threadRoutine(void *para)
 			*(prm->selfSignal) = 0;
 			break;
 		}
-		usleep(1);
+                nanosleep(&one_micro, NULL);
 	}
 }
 
@@ -197,7 +198,7 @@ static int getID(char *name)
 
 boolean prlContig2nodes(char *grapfile,int len_cut)
 {
-	long long i,num_seq;
+        long long i; // ,num_seq;
 	char name[256],*next_name;
 	FILE *fp;
 	pthread_t threads[thrd_num];
@@ -213,7 +214,8 @@ boolean prlContig2nodes(char *grapfile,int len_cut)
 	fp = ckopen(name, "r");
 	maxCtgLen = nameLen = 10;
 	minCtgLen = 1000;
-	num_seq = readseqpar(&maxCtgLen,&minCtgLen,&nameLen,fp);
+        //	num_seq = readseqpar(&maxCtgLen,&minCtgLen,&nameLen,fp);
+        readseqpar(&maxCtgLen,&minCtgLen,&nameLen,fp);
 	//printf("\nthere're %lld contigs in file: %s, max seq len %d, min seq len %d, max name len %d\n",
 		//num_seq,grapfile,maxCtgLen,minCtgLen,nameLen);
 	maxReadLen = maxCtgLen;

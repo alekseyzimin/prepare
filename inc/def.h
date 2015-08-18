@@ -14,8 +14,8 @@
 #define MaxEdgeCov 16000
 
 #define base2int(base)  (char)(((base)&0x06)>>1)
-#define int2base(seq)   "ACTG"[seq]
-#define int2compbase(seq)       "TGAC"[seq]
+#define int2base(seq)   "ACTG"[(int)seq]
+#define int2compbase(seq)       "TGAC"[(int)seq]
 #define int_comp(seq)   (char)(seq^0x02) //(char)((0x4E>>((seq)<<1))&0x03)
 
 int b_ban;

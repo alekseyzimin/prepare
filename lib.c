@@ -50,7 +50,6 @@ void scan_libInfo(char *libfile)
 	FILE *fp;
 	char line[1024],ch;
 	int i,j,index;
-	int libCounter;
 	boolean flag;
 	
 	fp = ckopen(libfile,"r");
@@ -86,7 +85,6 @@ void scan_libInfo(char *libfile)
 		lib_array[i].num_q1_file=0;	
 		lib_array[i].num_q2_file=0;	
 	}
-	libCounter = -1;
 	rewind(fp);
 	
 	i = -1;
@@ -174,7 +172,6 @@ void scan_libInfo(char *libfile)
 		lib_array[i].num_q1_file=0;	
 		lib_array[i].num_q2_file=0;	
 	}
-	libCounter = -1;
 	rewind(fp);
 	
 	i = -1;

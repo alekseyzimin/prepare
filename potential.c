@@ -22,8 +22,6 @@ void potential()
 
 	char name[256],*line;
 	FILE *fp;
-	int i;
-	int flag2;
 
 	loadUpdatedEdges(graphfile);
 
@@ -42,8 +40,8 @@ void potential()
 	fgets(line,lineLen,fp);
 	line[0] = '\0';
 	fprintf(stderr,"[%s]before inputLinks loop.\n",__FUNCTION__);
-	for(i=0;i<gradsCounter;i++){	
-		flag2 = inputLinks(fp,pes[i].insertS,line);
+	for(int i=0;i<gradsCounter;i++){	
+          inputLinks(fp,pes[i].insertS,line);
 	}
 	fprintf(stderr,"[%s]links file loaded.\n",__FUNCTION__);
 	//ctg4heapArray=ckalloc(100000*sizeof(CTGinHEAP));
@@ -59,7 +57,7 @@ void potential()
 	int used=0;
 	//CONNECT *cnt_stack=ckalloc(10000000*sizeof(CONNECT*));
 	//int cnt_count=0;
-	for(i=1;i<=num_ctg;i++){
+	for(unsigned int i=1;i<=num_ctg;i++){
 		if(contig_array[i].inSubGraph)
 			continue;
 		if(!contig_array[i].downwardConnect){
@@ -74,7 +72,7 @@ void potential()
 		//farthest_boarder=0;
 		curr_boarder=0;
 		//used_boarder=0;
-		int max_dist=0;
+		unsigned int max_dist=0;
 		//int node_dist=0;
 		int len=0;
 		//contig_array[i].inSubGraph=1;
@@ -170,16 +168,17 @@ void potential()
 	free((void *)line);
 	fclose(fp);
 	long long int sum=0;
-	for(i=0;i<pred_count;++i){
+	for(int i=0;i<pred_count;++i){
 		sum+=predict[i];
 	}
 	long long int half=sum/2;
 	printf("sum %lld , half  %lld.\n",sum,half);
 	qsort(predict,pred_count,sizeof(int),rev_comp);
 	sum=0;
-	for(i=0;i<pred_count;++i){	
+	for(int i=0;i<pred_count;++i){	
 		printf("len:\t%d\n",predict[i]);
 	}
+        int i;
 	for(i=0;i<pred_count;++i){
 		sum+=predict[i];
 		printf("len:\t%d\n",predict[i]);

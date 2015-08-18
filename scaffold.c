@@ -3,10 +3,11 @@
 #include "extfunc.h" 
 #include "extvab.h" 
 
-static void initenv(int argc, char **argv);
-static void display_scaff_usage();
+/* static void initenv(int argc, char **argv); */
+/* static void display_scaff_usage(); */
 
-static boolean LINK,SCAFF;
+//static boolean LINK;
+static boolean SCAFF;
 
 
 int call_scaffold()

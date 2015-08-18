@@ -54,7 +54,7 @@ Copyright 2007, 2008 Daniel Zerbino (zerbino@ebi.ac.uk)
 
 #define HEAPBLOCKSIZE 10000
 
-static int fh_comparedata(FibHeap * h, Coordinate key, unsigned int data, FibHeapNode * b);
+static int fh_comparedata(Coordinate key, unsigned int data, FibHeapNode * b);
 unsigned int fh_replacekeydata(FibHeap * h, FibHeapNode * x,Coordinate key, unsigned int data);
 
 static FibHeapNode *allocateFibHeapEl(FibHeap * heap)
@@ -202,7 +202,7 @@ FibHeap *fh_union(FibHeap * ha, FibHeap * hb)
 	 */
 
 	/* set fh_min if necessary */
-	if (fh_compare(ha, hb->fh_min, ha->fh_min) < 0)
+	if (fh_compare(hb->fh_min, ha->fh_min) < 0)
 		ha->fh_min = hb->fh_min;
 
 	fh_destroyheap(hb);
@@ -268,7 +268,7 @@ unsigned int fh_replacekeydata(FibHeap * h, FibHeapNode * x,
 	 * we can increase a key by deleting and reinserting, that
 	 * requires O(lgn) time.
 	 */
-	if ((r = fh_comparedata(h, key, data, x)) > 0) {
+	if ((r = fh_comparedata(key, data, x)) > 0) {
 		/* XXX - bad code! */
 		abort();
 	}
@@ -285,7 +285,7 @@ unsigned int fh_replacekeydata(FibHeap * h, FibHeapNode * x,
 	if (h->fh_keys && okey == key)
 		return odata;
 
-	if (y != NULL && fh_compare(h, x, y) <= 0) {
+	if (y != NULL && fh_compare(x, y) <= 0) {
 		fh_cut(h, x, y);
 		fh_cascading_cut(h, y);
 	}
@@ -294,7 +294,7 @@ unsigned int fh_replacekeydata(FibHeap * h, FibHeapNode * x,
 	 * the = is so that the call from fh_delete will delete the proper
 	 * element.
 	 */
-	if (fh_compare(h, x, h->fh_min) <= 0)
+	if (fh_compare(x, h->fh_min) <= 0)
 		h->fh_min = x;
 
 	return odata;
@@ -461,9 +461,9 @@ static void fh_consolidate(FibHeap * h)
 		/* XXX - assert that d < D */
 		while (a[d] != NULL) {
 			y = a[d];
-			if (fh_compare(h, x, y) > 0)
+			if (fh_compare(x, y) > 0)
 				swap(FibHeapNode *, x, y);
-			fh_heaplink(h, y, x);
+			fh_heaplink(y, x);
 			a[d] = NULL;
 			d++;
 		}
@@ -474,12 +474,13 @@ static void fh_consolidate(FibHeap * h)
 		if (a[i] != NULL) {
 			fh_insertrootlist(h, a[i]);
 			if (h->fh_min == NULL
-			    || fh_compare(h, a[i], h->fh_min) < 0)
+			    || fh_compare(a[i], h->fh_min) < 0)
 				h->fh_min = a[i];
 		}
 }
 
-static void fh_heaplink(FibHeap * h, FibHeapNode * y, FibHeapNode * x)
+//static void fh_heaplink(FibHeap * h, FibHeapNode * y, FibHeapNode * x)
+static void fh_heaplink(FibHeapNode * y, FibHeapNode * x)
 {
 	/* make y a child of x */
 	if (x->fhe_child == NULL)
@@ -605,7 +606,8 @@ static void fh_checkcons(FibHeap * h)
 	}
 }
 
-static int fh_compare(FibHeap * h, FibHeapNode * a, FibHeapNode * b)
+//static int fh_compare(FibHeap * h, FibHeapNode * a, FibHeapNode * b)
+static int fh_compare(FibHeapNode * a, FibHeapNode * b)
 {
 	if (a->fhe_key < b->fhe_key)
 		return -1;
@@ -615,14 +617,14 @@ static int fh_compare(FibHeap * h, FibHeapNode * a, FibHeapNode * b)
 }
 
 static int
-fh_comparedata(FibHeap * h, Coordinate key, unsigned int data, FibHeapNode * b)
+fh_comparedata(Coordinate key, unsigned int data, FibHeapNode * b)
 {
 	FibHeapNode a;
 
 	a.fhe_key = key;
 	a.fhe_data = data;
 
-	return fh_compare(h, &a, b);
+	return fh_compare(&a, b);
 }
 
 static void fh_insertel(FibHeap * h, FibHeapNode * x)

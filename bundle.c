@@ -14,7 +14,8 @@
 static STACK * isStack;
 static int onsameCtgPE;
 extern int calcuIS(STACK *intStack,int *SD);
-void outputBundle(FILE *fp, int insertS);
+//void outputBundle(FILE *fp, int insertS);
+void outputBundle(FILE *fp);
 
 static CONNECT *bun1AccuConnect(unsigned int e1, unsigned int e2, int gap, int weight)
 {
@@ -349,8 +350,8 @@ int call_bundle(){
 
 		fclose(linkF);
 	}
-	 
-	outputBundle(linkF,1);
+        
+	outputBundle(linkF);
 	destroyConnectMem();
 	deleteCntLookupTable();
 
@@ -362,7 +363,8 @@ int call_bundle(){
 	return 0;
 }
 
-void outputBundle(FILE *fp, int insertS)
+//void outputBundle(FILE *fp, int insertS)
+void outputBundle(FILE *fp)
 {
 	unsigned int i,bal_ctg,bal_toCtg;
 	CONNECT *cnts,*temp_cnt;

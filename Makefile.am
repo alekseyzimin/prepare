@@ -1,7 +1,7 @@
 ACLOCAL_AMFLAGS = -Im4
 
 AM_CPPFLAGS = -I$(srcdir)/inc
-AM_CFLAGS = -O3 -minline-all-stringops -funsafe-loop-optimizations -fprefetch-loop-arrays -funroll-loops -fomit-frame-pointer -fno-bounds-check -Wall -W
+AM_CFLAGS = -O3 -std=c99 -D_XOPEN_SOURCE=600 -minline-all-stringops -funsafe-loop-optimizations -fprefetch-loop-arrays -funroll-loops -fomit-frame-pointer -fno-bounds-check -Wall -W
 AM_LDFLAGS = -lm -lpthread
 
 bin_PROGRAMS = finalFusion

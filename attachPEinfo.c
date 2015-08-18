@@ -383,7 +383,7 @@ int connectByPE_grad(FILE *fp,int peGrad,char *line)
 						}
 					}
 					if(num==0){
-						fprintf(stderr,"[%s]num=0 in removing exceed 3*SD(%.1f) avg(%d)step",__FUNCTION__,SD,avg);
+						fprintf(stderr,"[%s]num=0 in removing exceed 3*SD(%.1f) avg(%lld)step",__FUNCTION__,SD,avg);
 						for(ii=0;ii<weight;ii++){
 							fprintf(stderr,"%d\t",tmp->PE[ii]);
 						}

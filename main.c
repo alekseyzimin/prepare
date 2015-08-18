@@ -8,6 +8,7 @@ extern int call_scaffold();
 extern int call_align();
 extern int call_bundle();
 extern int data_prepare();
+extern void potential();
 
 #define MAPPING 0
 #define SCAFF 1
@@ -129,7 +130,7 @@ int main(int argc, char **argv)
 		data_prepare();
 	}else if(mode==POTENT){
 		printf("[%s]Potential analysis mode selected .\n",__FUNCTION__)	;
-		if(outseq==NULL){
+		if(outseq==0){
 			usage();
 			exit(1);
 		}

@@ -96,7 +96,7 @@ static void locateContigOnscaff(char *graphfile)
 	CTGinSCAF *actg;
 	STACK *ctgStack,*aStack;
 	int index=0,counter,overallLen;
-	int starter,prev_start,gapN,scafLen;
+	int starter,prev_start,gapN,scafLen = 0;
 	unsigned int ctg,prev_ctg=0;
 
 	for(ctg=1;ctg<=num_ctg;ctg++){
@@ -210,8 +210,8 @@ void locateReadOnScaf(char *graphfile)
 	char name[1024],line[1024];
 	FILE *fp,*fo;
 	long long readno,counter=0,pre_readno=0;
-	unsigned int contigno,pre_contigno;
-	int pre_pos,pos;
+	unsigned int contigno,pre_contigno = 0;
+	int pre_pos = 0, pos;
 
 	locateContigOnscaff(graphfile);
 
